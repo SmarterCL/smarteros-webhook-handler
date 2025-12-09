@@ -1,0 +1,23 @@
+name: Build
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    
+    - name: Build Docker image
+      run: |
+        docker build -t smarteros-webhook-handler:latest .
+    
+    - name: Test Docker image
+      run: |
+        docker run --rm smarteros-webhook-handler:latest python -c "import src.main; print('✅ Import successful')"
